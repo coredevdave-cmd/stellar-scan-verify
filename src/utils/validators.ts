@@ -1,7 +1,8 @@
 import { z } from 'zod';
 
 export const verifyBody = z.object({
-  contractId: z.string().min(1),
+  // Soroban contract IDs are 32-byte StrKey contract addresses (C...).
+  contractId: z.string().regex(/^C[A-Z2-7]{55}$/, 'invalid Soroban contract ID'),
   network: z.enum(['testnet', 'mainnet', 'futurenet']),
-  rustVersion: z.string().optional(),
-});
+  rustVersion: z.string().regex(/^\d+\.\d+\.\d+$/, 'invalid Rust version').optional(),
+}).strict();
